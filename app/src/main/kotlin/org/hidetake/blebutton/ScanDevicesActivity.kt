@@ -29,7 +29,7 @@ class ScanDevicesActivity : AppCompatActivity() {
             return bluetoothAdapter.bluetoothLeScanner
         }
 
-    class ListDevicesAdapter(context: Context?, resource: Int) : ArrayAdapter<String>(context, resource) {
+    class ListDevicesAdapter(context: Context?, resource: Int) : ArrayAdapter<String>(context!!, resource) {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +39,8 @@ class ScanDevicesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_scan_devices)
 
         val listDevices = findViewById(R.id.list_devices) as ListView
-        listDevices.adapter = ListDevicesAdapter(this, )
+//        listDevices.adapter
+//        listDevices.adapter = ListDevicesAdapter(this, )
     }
 
     override fun onStart() {

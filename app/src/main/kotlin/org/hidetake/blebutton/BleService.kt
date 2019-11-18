@@ -30,7 +30,8 @@ class BleService : Service() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         preferences.registerOnSharedPreferenceChangeListener(onPreferenceChanged)
 
-        bleContext = BleContext(applicationContext, preferences.getString(MyPreference.device_address.name, ""))
+//        bleContext = BleContext(applicationContext, preferences.getString(MyPreference.device_address.name, "E6:21:4A:19:F5:30"))
+        bleContext = BleContext(applicationContext, "E6:21:4A:19:F5:30")
 
         val broadcastManager = LocalBroadcastManager.getInstance(applicationContext)
         broadcastManager.registerReceiver(onBleButtonPressed, BleState.intentFilter(BleState.BUTTON_PRESSED))
@@ -75,7 +76,8 @@ class BleService : Service() {
                 broadcastManager.unregisterReceiver(onBleButtonPressed)
                 bleContext?.close()
 
-                bleContext = BleContext(applicationContext, preferences.getString(MyPreference.device_address.name, ""))
+//                bleContext = BleContext(applicationContext, preferences.getString(MyPreference.device_address.name, "E6:21:4A:19:F5:30"))
+                bleContext = BleContext(applicationContext, "E6:21:4A:19:F5:30")
                 broadcastManager.registerReceiver(onBleButtonPressed, BleState.intentFilter(BleState.BUTTON_PRESSED))
                 bleContext!!.connect()
             }
