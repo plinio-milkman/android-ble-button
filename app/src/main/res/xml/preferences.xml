@@ -2,39 +2,18 @@
 
     <PreferenceCategory android:title="@string/pref_header_device">
 
-        <PreferenceScreen
-            android:title="@string/pref_scan_devices">
+        <PreferenceScreen android:title="@string/pref_scan_devices">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:targetPackage="org.hidetake.blebutton"
-                android:targetClass="org.hidetake.blebutton.ScanDevicesActivity" />
+                android:targetClass="com.android.blebutton.ScanDevicesActivity"
+                android:targetPackage="com.android.blebutton" />
         </PreferenceScreen>
+        <!--        android:defaultValue="E6:21:4A:19:F5:30"-->
         <EditTextPreference
             android:defaultValue="00:00:00:00:00:00"
+            android:dialogMessage="e.g. 00:00:00:00:00:00"
             android:key="device_address"
-            android:title="@string/pref_device_address"
-            android:dialogMessage="e.g. 00:00:00:00:00:00" />
+            android:title="@string/pref_device_address" />
 
     </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/pref_header_notifications">
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="notifications_ble_button"
-            android:title="@string/pref_title_new_message_notifications" />
-        <RingtonePreference
-            android:defaultValue="content://settings/system/notification_sound"
-            android:dependency="notifications_ble_button"
-            android:key="notifications_ble_button_ringtone"
-            android:ringtoneType="notification"
-            android:title="@string/pref_title_ringtone" />
-        <SwitchPreference
-            android:defaultValue="true"
-            android:dependency="notifications_ble_button"
-            android:key="notifications_ble_button_vibrate"
-            android:title="@string/pref_title_vibrate" />
-
-    </PreferenceCategory>
-
 </PreferenceScreen>

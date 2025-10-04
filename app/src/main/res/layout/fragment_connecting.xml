@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.hidetake.blebutton.ConnectingFragment">
+    tools:context="com.android.blebutton.ConnectingFragment">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -10,7 +10,7 @@
         android:id="@+id/imageView"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:background="@mipmap/wifi"
+        android:background="@drawable/bluetooth_scanner"
         android:layout_margin="10dp" />
 
     <TextView

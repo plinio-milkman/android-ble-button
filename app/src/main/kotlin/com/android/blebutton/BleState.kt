@@ -1,4 +1,4 @@
-package org.hidetake.blebutton
+package com.android.blebutton
 
 import android.content.Intent
 import android.content.IntentFilter
@@ -15,6 +15,7 @@ enum class BleState {
     READY,
     IDLE,
     BUTTON_PRESSED,
+    BUTTON_RELEASED,
     SENDING_ALARM_START,
     SENT_ALARM_START,
     SENDING_ALARM_STOP,

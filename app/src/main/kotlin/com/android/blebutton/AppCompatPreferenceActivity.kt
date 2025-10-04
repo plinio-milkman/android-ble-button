@@ -1,15 +1,15 @@
-package org.hidetake.blebutton
+package com.android.blebutton
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.preference.PreferenceActivity
-import android.support.annotation.LayoutRes
-import android.support.v7.app.AppCompatDelegate
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.fragment.app.FragmentActivity
 
-abstract class AppCompatPreferenceActivity : PreferenceActivity() {
+abstract class AppCompatPreferenceActivity : FragmentActivity() {
 
     private var appCompatDelegateInstance: AppCompatDelegate? = null
     val appCompatDelegate: AppCompatDelegate
@@ -21,6 +21,7 @@ abstract class AppCompatPreferenceActivity : PreferenceActivity() {
             else -> appCompatDelegateInstance!!
         }
 
+    @Deprecated("Deprecated in Java")
     override fun onCreate(savedInstanceState: Bundle?) {
         appCompatDelegate.installViewFactory()
         appCompatDelegate.onCreate(savedInstanceState)
@@ -67,11 +68,13 @@ abstract class AppCompatPreferenceActivity : PreferenceActivity() {
         appCompatDelegate.onConfigurationChanged(newConfig)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onStop() {
         super.onStop()
         appCompatDelegate.onStop()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onDestroy() {
         super.onDestroy()
         appCompatDelegate.onDestroy()

@@ -1,15 +1,14 @@
-package org.hidetake.blebutton
+package com.android.blebutton
 
 import android.content.BroadcastReceiver
 import android.content.Context
-import android.os.Handler
-import android.support.v4.content.LocalBroadcastManager
-import android.util.Log
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
-class BleStateManager(context: Context, bleDeviceAddress: String) {
+class BleStateManager(context: Context, private val bleDeviceAddress: String) : LogCalls {
 
-    private val bleDeviceAddress = bleDeviceAddress
-    private val broadcastManager = LocalBroadcastManager.getInstance(context)
+    private val broadcastManager = LocalBroadcastManager.getInstance(context.applicationContext)
     private val broadcastReceivers = arrayListOf<BroadcastReceiver>()
 
     private var _currentState: BleState = BleState.INIT
@@ -18,24 +17,29 @@ class BleStateManager(context: Context, bleDeviceAddress: String) {
 
     fun receiveBleEvent(event: BleEvent) {
         val intent = BleEvent.intent(bleDeviceAddress, currentState, event)
-        Log.d("BleStateManager", "Received event $event and broadcasting ${intent.action}")
+        printLog(TAG, "Received event $event and broadcasting ${intent.action}")
         broadcastManager.sendBroadcast(intent)
     }
 
     fun addTransition(from: BleState, to: BleState, event: BleEvent) {
-        val receiver = LambdaBroadcastReceiver { context, intent -> transit(to) }
+        val receiver = LambdaBroadcastReceiver { _, _ -> transit(to) }
         broadcastManager.registerReceiver(receiver, BleEvent.intentFilter(bleDeviceAddress, from, event))
         broadcastReceivers.add(receiver)
     }
 
     fun addTransition(from: BleState, to: BleState, delay: Long = 0) {
-        val receiver = LambdaBroadcastReceiver { context, intent -> Handler().postDelayed({ transit(to) }, delay) }
+        val receiver = LambdaBroadcastReceiver { _, _ ->
+            runBlocking {
+                delay(delay)
+                transit(to)
+            }
+        }
         broadcastManager.registerReceiver(receiver, BleState.intentFilter(from))
         broadcastReceivers.add(receiver)
     }
 
     fun on(state: BleState, handler: () -> Unit) {
-        val receiver = LambdaBroadcastReceiver { context, intent -> handler() }
+        val receiver = LambdaBroadcastReceiver { _, _ -> handler() }
         broadcastManager.registerReceiver(receiver, BleState.intentFilter(state))
         broadcastReceivers.add(receiver)
     }
@@ -46,18 +50,21 @@ class BleStateManager(context: Context, bleDeviceAddress: String) {
         }
     }
 
-    fun transit(to: BleState) {
-        Log.d("BleStateManager", "Transit: $currentState -> $to")
+    private fun transit(to: BleState) {
+        printLog(TAG, "Transit: $currentState -> $to")
         _currentState = to
         broadcastManager.sendBroadcast(BleState.intent(to))
     }
 
     fun close() {
-        Log.d("BleStateManager", "Close: unregister ${broadcastReceivers.size} broadcast receivers")
+        printLog(TAG, "Close: unregister ${broadcastReceivers.size} broadcast receivers")
         broadcastReceivers.forEach { receiver ->
             broadcastManager.unregisterReceiver(receiver)
         }
         transit(BleState.CLOSED)
     }
 
+    companion object {
+        const val TAG = "BleStateManager"
+    }
 }

@@ -1,16 +1,13 @@
-package org.hidetake.blebutton
+package com.android.blebutton
 
 import android.content.ComponentName
 import android.content.ServiceConnection
 import android.os.Binder
 import android.os.IBinder
-import android.util.Log
 
-class BleServiceConnection() : ServiceConnection {
+class BleServiceConnection : ServiceConnection, LogCalls {
 
-    class BleServiceBinder(service: BleService) : Binder() {
-        val service = service
-    }
+    class BleServiceBinder(val service: BleService) : Binder()
 
     private var _service: BleService? = null
 
@@ -18,15 +15,19 @@ class BleServiceConnection() : ServiceConnection {
         get() = _service
 
     override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
-        Log.d("BleServiceConnection", "onServiceConnected()")
+        printLog(TAG, "onServiceConnected()")
         if (binder is BleServiceBinder) {
+            printLog(TAG, "is BleServiceBinder")
             _service = binder.service
         }
     }
 
     override fun onServiceDisconnected(name: ComponentName?) {
-        Log.d("BleServiceConnection", "onServiceDisconnected()")
+        printLog(TAG, "onServiceDisconnected()")
         _service = null
     }
 
+    companion object {
+        const val TAG = "BleServiceConnection"
+    }
 }
