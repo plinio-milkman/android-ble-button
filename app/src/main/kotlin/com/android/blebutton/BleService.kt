@@ -15,6 +15,7 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
+import com.android.blebutton.BtPermissions.Companion.POST_NOTIFICATIONS_PERMISSION
 
 class BleService : Service(), LogCalls {
 
@@ -112,7 +113,7 @@ class BleService : Service(), LogCalls {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             this.checkPermission(
-                "android.permission.POST_NOTIFICATIONS",
+                POST_NOTIFICATIONS_PERMISSION,
                 granted = { notificationManager.notify(BUTTON_NOTIFICATION_ID, notification) },
                 denied = {
                     printLog(TAG, "Not agreed POST_NOTIFICATIONS")
